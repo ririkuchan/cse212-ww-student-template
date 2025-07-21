@@ -1,5 +1,3 @@
-using System;
-
 public class TakingTurnsQueue
 {
     private readonly PersonQueue _people = new();
@@ -18,24 +16,20 @@ public class TakingTurnsQueue
         {
             throw new InvalidOperationException("No one in the queue.");
         }
-
-        Person person = _people.Dequeue();
-
-        if (person.Turns <= 0)
+        else
         {
-            // Infinite turns → Re-add as-is
-            _people.Enqueue(person);
+            Person person = _people.Dequeue();
+            if (person.Turns > 1)
+            {
+                person.Turns -= 1;
+                _people.Enqueue(person);
+            }
+            else if (person.Turns <= 0)
+            {
+                _people.Enqueue(person); // Infinite turns
+            }
+            return person;
         }
-        else if (person.Turns > 1)
-        {
-            // More than 1 turn left → Re-add with one fewer turn
-            var updatedPerson = new Person(person.Name, person.Turns - 1);
-            _people.Enqueue(updatedPerson);
-        }
-
-        // If Turns == 1 → Don't enqueue again (they're done)
-
-        return person;
     }
 
     public override string ToString()

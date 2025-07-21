@@ -1,48 +1,40 @@
-using System;
 using System.Collections.Generic;
 
-public class PriorityQueue
+public class Person
 {
-    private class QueueItem
-    {
-        public string Value { get; set; }
-        public int Priority { get; set; }
+    public string Name { get; }
+    public int Turns { get; set; }
 
-        public QueueItem(string value, int priority)
-        {
-            Value = value;
-            Priority = priority;
-        }
+    public Person(string name, int turns)
+    {
+        Name = name;
+        Turns = turns;
+    }
+}
+
+public class PersonQueue
+{
+    private readonly Queue<Person> _queue = new();
+
+    public void Enqueue(Person person)
+    {
+        _queue.Enqueue(person);
     }
 
-    private List<QueueItem> _items = new();
-
-    public void Enqueue(string value, int priority)
+    public Person Dequeue()
     {
-        _items.Add(new QueueItem(value, priority));
+        return _queue.Dequeue();
     }
 
-    public string Dequeue()
+    public bool IsEmpty()
     {
-        if (_items.Count == 0)
-        {
-            throw new InvalidOperationException("The queue is empty.");
-        }
+        return _queue.Count == 0;
+    }
 
-        int maxPriority = int.MinValue;
-        int index = -1;
+    public int Length => _queue.Count;
 
-        for (int i = 0; i < _items.Count; i++)
-        {
-            if (_items[i].Priority > maxPriority)
-            {
-                maxPriority = _items[i].Priority;
-                index = i;
-            }
-        }
-
-        string result = _items[index].Value;
-        _items.RemoveAt(index);
-        return result;
+    public override string ToString()
+    {
+        return string.Join(", ", _queue);
     }
 }

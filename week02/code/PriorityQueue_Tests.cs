@@ -4,15 +4,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 public class PriorityQueueTests
 {
     [TestMethod]
-    // Scenario: Add three items with different priorities.
-    // Expected Result: The item with the highest priority is dequeued first.
-    // Defect(s) Found: None
-    public void TestPriorityQueue_HighestPriority()
+    public void TestPriorityQueue_SimpleEnqueueDequeue()
     {
         var pq = new PriorityQueue();
         pq.Enqueue("A", 1);
-        pq.Enqueue("B", 3);
-        pq.Enqueue("C", 2);
+        pq.Enqueue("B", 5);
+        pq.Enqueue("C", 3);
 
         Assert.AreEqual("B", pq.Dequeue());
         Assert.AreEqual("C", pq.Dequeue());
@@ -20,35 +17,31 @@ public class PriorityQueueTests
     }
 
     [TestMethod]
-    // Scenario: Add two items with the same highest priority.
-    // Expected Result: FIFO order is maintained among equal priority items.
-    // Defect(s) Found: None
-    public void TestPriorityQueue_SamePriorityFIFO()
+    public void TestPriorityQueue_TieBreakerFIFO()
     {
         var pq = new PriorityQueue();
-        pq.Enqueue("X", 5);
-        pq.Enqueue("Y", 5);
+        pq.Enqueue("A", 5);
+        pq.Enqueue("B", 5);
+        pq.Enqueue("C", 5);
 
-        Assert.AreEqual("X", pq.Dequeue());
-        Assert.AreEqual("Y", pq.Dequeue());
+        Assert.AreEqual("A", pq.Dequeue());
+        Assert.AreEqual("B", pq.Dequeue());
+        Assert.AreEqual("C", pq.Dequeue());
     }
 
     [TestMethod]
-    // Scenario: Dequeue from an empty queue.
-    // Expected Result: InvalidOperationException with "The queue is empty."
-    // Defect(s) Found: None
-    public void TestPriorityQueue_EmptyQueue()
+    public void TestPriorityQueue_EmptyThrows()
     {
         var pq = new PriorityQueue();
 
         try
         {
             pq.Dequeue();
-            Assert.Fail("Expected exception was not thrown.");
+            Assert.Fail("Exception should have been thrown.");
         }
-        catch (InvalidOperationException ex)
+        catch (InvalidOperationException e)
         {
-            Assert.AreEqual("The queue is empty.", ex.Message);
+            Assert.AreEqual("The queue is empty.", e.Message);
         }
     }
 }
