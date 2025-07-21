@@ -1,35 +1,48 @@
-/// <summary>
-/// A basic implementation of a Queue
-/// </summary>
-public class PersonQueue
+using System;
+using System.Collections.Generic;
+
+public class PriorityQueue
 {
-    private readonly List<Person> _queue = new();
-
-    public int Length => _queue.Count;
-
-    /// <summary>
-    /// Add a person to the queue
-    /// </summary>
-    /// <param name="person">The person to add</param>
-    public void Enqueue(Person person)
+    private class QueueItem
     {
-        _queue.Insert(0, person);
+        public string Value { get; set; }
+        public int Priority { get; set; }
+
+        public QueueItem(string value, int priority)
+        {
+            Value = value;
+            Priority = priority;
+        }
     }
 
-    public Person Dequeue()
+    private List<QueueItem> _items = new();
+
+    public void Enqueue(string value, int priority)
     {
-        var person = _queue[0];
-        _queue.RemoveAt(0);
-        return person;
+        _items.Add(new QueueItem(value, priority));
     }
 
-    public bool IsEmpty()
+    public string Dequeue()
     {
-        return Length == 0;
-    }
+        if (_items.Count == 0)
+        {
+            throw new InvalidOperationException("The queue is empty.");
+        }
 
-    public override string ToString()
-    {
-        return $"[{string.Join(", ", _queue)}]";
+        int maxPriority = int.MinValue;
+        int index = -1;
+
+        for (int i = 0; i < _items.Count; i++)
+        {
+            if (_items[i].Priority > maxPriority)
+            {
+                maxPriority = _items[i].Priority;
+                index = i;
+            }
+        }
+
+        string result = _items[index].Value;
+        _items.RemoveAt(index);
+        return result;
     }
 }
