@@ -1,19 +1,3 @@
-/// <summary>
-/// Defines a maze using a dictionary. The dictionary is provided by the
-/// user when the Maze object is created. The dictionary will contain the
-/// following mapping:
-///
-/// (x,y) : [left, right, up, down]
-///
-/// 'x' and 'y' are integers and represents locations in the maze.
-/// 'left', 'right', 'up', and 'down' are boolean are represent valid directions
-///
-/// If a direction is false, then we can assume there is a wall in that direction.
-/// If a direction is true, then we can proceed.  
-///
-/// If there is a wall, then throw an InvalidOperationException with the message "Can't go that way!".  If there is no wall,
-/// then the 'currX' and 'currY' values should be changed.
-/// </summary>
 public class Maze
 {
     private readonly Dictionary<ValueTuple<int, int>, bool[]> _mazeMap;
@@ -25,41 +9,40 @@ public class Maze
         _mazeMap = mazeMap;
     }
 
-    // TODO Problem 4 - ADD YOUR CODE HERE
-    /// <summary>
-    /// Check to see if you can move left.  If you can, then move.  If you
-    /// can't move, throw an InvalidOperationException with the message "Can't go that way!".
-    /// </summary>
+    private bool[] CurrCell()
+    {
+        return _mazeMap[( _currX, _currY )]; // 配列: [left, right, up, down]
+    }
+
+    private static void ThrowBlocked() =>
+        throw new InvalidOperationException("Can't go that way!");
+
     public void MoveLeft()
     {
-        // FILL IN CODE
+        var dirs = CurrCell();
+        if (!dirs[0]) ThrowBlocked();
+        _currX -= 1;
     }
 
-    /// <summary>
-    /// Check to see if you can move right.  If you can, then move.  If you
-    /// can't move, throw an InvalidOperationException with the message "Can't go that way!".
-    /// </summary>
     public void MoveRight()
     {
-        // FILL IN CODE
+        var dirs = CurrCell();
+        if (!dirs[1]) ThrowBlocked();
+        _currX += 1;
     }
 
-    /// <summary>
-    /// Check to see if you can move up.  If you can, then move.  If you
-    /// can't move, throw an InvalidOperationException with the message "Can't go that way!".
-    /// </summary>
     public void MoveUp()
     {
-        // FILL IN CODE
+        var dirs = CurrCell();
+        if (!dirs[2]) ThrowBlocked();
+        _currY += 1;
     }
 
-    /// <summary>
-    /// Check to see if you can move down.  If you can, then move.  If you
-    /// can't move, throw an InvalidOperationException with the message "Can't go that way!".
-    /// </summary>
     public void MoveDown()
     {
-        // FILL IN CODE
+        var dirs = CurrCell();
+        if (!dirs[3]) ThrowBlocked();
+        _currY -= 1;
     }
 
     public string GetStatus()
